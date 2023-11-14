@@ -60,6 +60,10 @@ Here, we accomplish model training and inference in two frameworks: pytorch and 
 - _jax_gists
   - this is some scratch work I did, to get the hang of instantiating jax models
 
+## Other contents
+- ```README.md``` (this file)
+- generate_data
+  - some simple code to generate toy datasets
 
 
 ## Todo
