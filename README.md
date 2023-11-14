@@ -54,7 +54,7 @@ Loss function is mean squared error between predicted and true outputs.
 - integrate tensorboard
 - in real workflows, I also monitor validation loss during training; implement this
 - should turn the ```RUN.py``` scripts into jupyter notebooks
-  - instead of plotting example trajectories, could stitch them all together (this would require annotating the original data with ```t```, or some inference about order/windowing)
+  - instead of plotting example trajectories, could stitch them all together (this would require annotating the original data with ```t```, or some clever code to work out order/windowing)
 - the jax model is implemented as two separate models, but I think this could be united under one main model object with separate encoder/decoder methods (similar to the pytorch setup)
 
 
