@@ -38,8 +38,8 @@ Loss function is mean squared error between predicted and true outputs.
   - these functions separately initialize the encoder and decoder, returning two TrainState objects
 - ```modelBlocks.py```
   - this stores the different types of encoders and decoders to choose from
-  - uses layers defined separately (in ```modelUtils.py```)
-- ```modelUtils.py```
+  - uses layers defined separately (in ```modelLayersUtils.py```)
+- ```modelLayersUtils.py```
   - this stores the individual LSTM layers (composed together in ```modelBlocks.py``` models)
   - this also has different concatenation functions, for combining the forward and reverse directions of the bidirectional LSTMs
 - ```TrainTest.py```
