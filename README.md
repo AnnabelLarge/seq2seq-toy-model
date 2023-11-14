@@ -47,6 +47,8 @@ Loss function is mean squared error between predicted and true outputs.
   - also has a helper utility for setting up orbax checkpoints
 - ```RUN.py```
   - this is where everything happens, including: 1.) loading data, 2.) instantiating a model, 3.) training the model using the training set, 4.) generating new trajectories prompted by the test set, 5.) plotting an example trajectory
+- ```_jax_gists```
+  - this is some scratch work I did, to get the hang of instantiating jax models
 
 
 
