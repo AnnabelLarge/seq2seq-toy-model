@@ -1,4 +1,4 @@
-# seq2seq: A toy model
+# seq2seq: A toy model in two frameworks
 
 ## Task description
 The goal is a seq2seq model than can autoregressively generate a simple function output (like a simple time-series forecasting problem). Two toy datasets are given: 
@@ -15,6 +15,16 @@ Our model uses the following:
 - unidirectional LSTM decoder
 
 Loss function is mean squared error between predicted and true outputs.
+
+Here, we accomplish model training and inference in two frameworks: pytorch and jax. Mostly the same organization, with some extra things needed for the jax codebase. A table showing corresponding pieces of code and a brief description-
+
+| pytorch version | jax version                                          | description                                                     |
+|-----------------|------------------------------------------------------|-----------------------------------------------------------------|
+| data (folder)   | data (folder)                                        | stores training and test data                                   |
+| Dataloader.py   | Dataloader.py                                        | stores dataloaders                                              |
+| Models.py       | Initializers.py, modelBlocks.py, modelLayersUtils.py | associated the building the model architectures, initialization |
+| TrainTest.py    | TrainTest.py                                         | associated with training and validating models                  |
+| RUN.py          | RUN.py                                               | the script to run the full workflow                             |
 
 
 ## Pytorch codebase organization
