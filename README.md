@@ -1,7 +1,7 @@
 # seq2seq: A toy model in two frameworks
 
 ## Task description
-The goal is a seq2seq model than can autoregressively generate a simple function output (like a simple time-series forecasting problem). Two toy datasets are given: 
+The goal is a seq2seq model than can autoregressively generate a simple function output (like a simple time-series forecasting problem). That is, prompted with a value ```f(t)```, generate a new trajectory ```[f(t+1), f(t+2), ..., f(T)]```. Two toy datasets are given: 
 
 1.  ```f(t) = 0.5t```
 2.  ```f(t) = sin([2 * np.pi * 0.1] t)```
