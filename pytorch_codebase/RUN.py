@@ -30,7 +30,7 @@ model_file = 'lineardata_LSTMparams.pt'
 
 # training loop params
 batch_size = 50
-num_epochs = 1000
+num_epochs = 10
 learning_rate = 0.001
 
 

@@ -8,7 +8,8 @@ Created on Tue Oct 31 10:55:32 2023
 import torch
 from torch import nn, optim
 
-def train_seq2seq(model, num_epochs, learning_rate, training_dl, model_file):
+def train_seq2seq(model, num_epochs, learning_rate, training_dl, test_dl, 
+                  model_file):
     """
     Train the model and save its best checkpoint
     
@@ -17,40 +18,69 @@ def train_seq2seq(model, num_epochs, learning_rate, training_dl, model_file):
     """
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     model.train()
-    best_loss = 99999
+    best_train_loss = 99999
+    best_test_loss = 99999
     for epoch in range(num_epochs):
-        if epoch % 100 == 0:
-            print(f'PROGRESS: {epoch}/{num_epochs}')
-            
-        # initialize loss storage for batch
-        total_epoch_loss = 0
-        
-        # iterate through batches
+        ######################################
+        ### working with training dataloader #
+        ######################################
+        total_epoch_train_loss = 0
         for batch in training_dl:
             # unpack
             inseqs, outseqs = batch
             
             # zero out the optimizer and compute loss with current params
             optimizer.zero_grad()
+            batch_train_loss = model.compute_loss(source=inseqs,
+                                                  target=outseqs)
+            
+            # save the loss for this batch
+            total_epoch_train_loss += batch_train_loss
+            
+            # backpropogate loss
+            batch_train_loss.backward()
+            optimizer.step()
+            
+            # clear vars
+            del inseqs, outseqs, batch_train_loss
+        
+        # get an average epoch loss, decide whether or not to save model
+        ave_epoch_train_loss = total_epoch_train_loss/len(training_dl)
+        if ave_epoch_train_loss < best_train_loss:
+            print(f'New best training loss at epoch {epoch}: {ave_epoch_train_loss}')
+            torch.save(model.state_dict(), model_file)
+            best_loss = ave_epoch_train_loss
+        
+        # clear vars
+        del total_epoch_train_loss
+        
+        
+        ##################################
+        ### working with test dataloader #
+        ##################################
+        total_epoch_test_loss = 0
+        for batch in test_dl:
+            # unpack
+            inseqs, outseqs = batch
+            
+            # compute loss with current params
             batch_loss = model.compute_loss(source=inseqs,
                                             target=outseqs)
             
             # save the loss for this batch
-            total_epoch_loss += batch_loss
-            
-            # backpropogate loss
-            batch_loss.backward()
-            optimizer.step()
+            total_epoch_train_loss += batch_loss
             
             # clear vars
             del inseqs, outseqs, batch_loss
         
         # get an average epoch loss, decide whether or not to save model
-        ave_epoch_loss = total_epoch_loss/len(training_dl)
-        if ave_epoch_loss < best_loss:
-            print(f'New best training loss at epoch {epoch}: {ave_epoch_loss}')
+        ave_epoch_train_loss = total_epoch_train_loss/len(training_dl)
+        if ave_epoch_train_loss < best_train_loss:
+            print(f'New best training loss at epoch {epoch}: {ave_epoch_train_loss}')
             torch.save(model.state_dict(), model_file)
-            best_loss = ave_epoch_loss
+            best_loss = ave_epoch_train_loss
+        del total_epoch_train_loss
+            
 
 
 def generate(best_model, test_dl):
@@ -72,7 +102,7 @@ def generate(best_model, test_dl):
         gen_length = inseqs.shape[1]
         
         # encode input sequences first
-        enc_out, enc_hidden = best_model.encode(inseqs)
+        _, enc_hidden = best_model.encode(inseqs)
         
         # bucket variables to adjust through loop
         decoder_input = inseqs[:,-1].unsqueeze(1)
